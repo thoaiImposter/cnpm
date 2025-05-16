@@ -163,7 +163,6 @@ public class ManageDrinkActivity extends BaseActivity {
                 }
             }
         });
-cd
         RecyclerView rcvDrink = findViewById(R.id.rcv_data);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvDrink.setLayoutManager(linearLayoutManager);
