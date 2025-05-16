@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MyApplication extends Application {
 
-    private static final String FIREBASE_URL = "https://helloasod-default-rtdb.firebaseio.com";
+    private static final String FIREBASE_URL = "https://barmanager-46128-default-rtdb.firebaseio.com";
 
     public static MyApplication get(Context context) {
         return (MyApplication) context.getApplicationContext();
