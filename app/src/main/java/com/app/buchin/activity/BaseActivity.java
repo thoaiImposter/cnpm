@@ -94,4 +94,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setFunction() {
 
     }
+
+    public void setFunctionToDrink() {
+
+    }
+
 }
