@@ -91,12 +91,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void setFunction() {
-
-    }
-
-    public void setFunctionToDrink() {
-
-    }
-
 }
