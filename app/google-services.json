@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "59202244957",
+    "firebase_url": "https://helloasod-default-rtdb.firebaseio.com",
+    "project_id": "helloasod",
+    "storage_bucket": "helloasod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59202244957:android:cbb955746d7c260f1058b4",
+        "android_client_info": {
+          "package_name": "com.app.buchin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByFb0MHiXF8oTUKoL_EQtyOtIfmSgH8tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
