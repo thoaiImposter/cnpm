@@ -136,4 +136,20 @@ public class FeatureActivity extends BaseActivity {
         bundle.putBoolean(Constants.KEY_DRINK_POPULAR, true);
         GlobalFuntion.startActivity(this, StatisticalActivity.class, bundle);
     }
+
+    // Tách phương thức showAdmobBanner thành hai phương thức
+    private void initializeAdmob() {
+        MobileAds.initialize(this, "ca-app-pub-8577216370890753~4422934437");
+    }
+
+    private void loadAdmobBanner() {
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+
+    private Feature createFeature(int id, int iconResId, int titleResId) {
+        return new Feature(id, iconResId, getString(titleResId));
+    }
+
 }
