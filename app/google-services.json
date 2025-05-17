@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "59202244957",
-    "firebase_url": "https://helloasod-default-rtdb.firebaseio.com",
-    "project_id": "helloasod",
-    "storage_bucket": "helloasod.firebasestorage.app"
+    "project_number": "949995975541",
+    "firebase_url": "https://barmanager-46128-default-rtdb.firebaseio.com",
+    "project_id": "barmanager-46128",
+    "storage_bucket": "barmanager-46128.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:59202244957:android:cbb955746d7c260f1058b4",
+        "mobilesdk_app_id": "1:949995975541:android:d97466020c0d72fdea193c",
         "android_client_info": {
           "package_name": "com.app.buchin"
         }
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyByFb0MHiXF8oTUKoL_EQtyOtIfmSgH8tg"
+          "current_key": "AIzaSyAZxS8LRLQ6pE2K3iziefyDzvipwguXnjg"
         }
       ],
       "services": {

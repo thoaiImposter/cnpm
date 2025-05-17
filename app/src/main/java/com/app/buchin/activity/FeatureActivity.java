@@ -11,6 +11,7 @@ import com.app.buchin.adapter.FeatureAdapter;
 import com.app.buchin.constant.Constants;
 import com.app.buchin.constant.GlobalFuntion;
 import com.app.buchin.model.Feature;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -136,4 +137,37 @@ public class FeatureActivity extends BaseActivity {
         bundle.putBoolean(Constants.KEY_DRINK_POPULAR, true);
         GlobalFuntion.startActivity(this, StatisticalActivity.class, bundle);
     }
+
+    // Tách phương thức showAdmobBanner thành hai phương thức
+    private void initializeAdmob() {
+        MobileAds.initialize(this, "ca-app-pub-8577216370890753~4422934437");
+    }
+
+    private void loadAdmobBanner() {
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+
+    // Tối ưu phương thức createFeature để dễ mở rộng
+    private Feature createFeature(int id, int iconResId, int titleResId) {
+        String title = getString(titleResId);
+        return new Feature(id, iconResId, title);
+    }
+
+    // Bổ sung phương thức loadAdWithCallback cho phép xử lý callback tải xong
+    private void loadAdWithCallback() {
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+
+            }
+
+        });
+    }
+
 }
