@@ -41,11 +41,11 @@ public class StatisticalActivity extends BaseActivity {
     private boolean isDrinkPopular;
     private List<Statistical> mListStatisticals;
 
-    // 10.1.6 Giao diện StatisticalActivity được khởi tạo và hiển thị danh sách thống kê.
+    // 10.1.6 Giao diện StatisticalActivity danh sách thống kê đồ uống bán chạy được khởi tạo.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 10.1.6.1 hiển thị giao diện
+        // Khởi tạo giao diện
         setContentView(R.layout.activity_statistical);
         // 10.1.7 Hệ thống đọc Intent và xác nhận đây là thống kê "bán chạy".
         getDataIntent();
@@ -148,14 +148,14 @@ public class StatisticalActivity extends BaseActivity {
         });
     }
 
-    // 10.1.9 Hệ thống lọc các bản ghi phù hợp và nhóm chúng theo từng đồ uống (drinkId).
     private void getListStatistical() {
-        MyApplication.get(this).getHistoryDatabaseReference()
+        MyApplication.get(this).getHistoryDatabaseReference()   // dữ liệu History trong Firebase
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         List<History> list = new ArrayList<>();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            // 10.1.9 Hệ thống lọc các bản ghi phù hợp và nhóm chúng theo từng đồ uống (drinkId).
                             History history = dataSnapshot.getValue(History.class);
                             if (canAddHistory(history)) {
                                 list.add(history);
@@ -216,7 +216,7 @@ public class StatisticalActivity extends BaseActivity {
         for (History history : list) {
             long drinkId = history.getDrinkId();
             if (checkStatisticalExist(drinkId)) {
-                // 10.1.9.2 Gom nhóm dữ liệu theo drinkId
+                // Gom nhóm dữ liệu theo drinkId
                 getStatisticalFromDrinkId(drinkId).getHistories().add(history);
             } else {
                 Statistical statistical = new Statistical();
