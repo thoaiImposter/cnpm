@@ -36,9 +36,9 @@ public class FeatureActivity extends BaseActivity {
         RecyclerView rcvFeature = findViewById(R.id.rcv_feature);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rcvFeature.setLayoutManager(gridLayoutManager);
-        // 10.1.1.1  Hệ thống khởi tạo adapter với danh sách chức năng
+        // 10.1.2 Người quản lý nhấn vào chức năng "Bán chạy"  từ danh sách các chức năng
         FeatureAdapter featureAdapter = new FeatureAdapter(getListFeatures(), this::onClickItemFeature);
-        // 10.1.1.2 Gán adapter vào RecyclerView
+        // Gán adapter vào RecyclerView
         rcvFeature.setAdapter(featureAdapter);
     }
 
@@ -60,7 +60,7 @@ public class FeatureActivity extends BaseActivity {
         list.add(new Feature(Feature.FEATURE_REVELUE, R.drawable.ic_revenue, getString(R.string.feature_revenue)));
         list.add(new Feature(Feature.FEATURE_COST, R.drawable.ic_cost, getString(R.string.feature_cost)));
         list.add(new Feature(Feature.FEATURE_PROFIT, R.drawable.ic_profit, getString(R.string.feature_profit)));
-        // 10.1.1.3 chức năng "Bán chạy" trong danh sách các chức năng
+        // Chức năng "Bán chạy" trong danh sách các chức năng
         list.add(new Feature(Feature.FEATURE_DRINK_POPULAR, R.drawable.ic_drink_popular, getString(R.string.feature_drink_popular)));
 
         return list;
@@ -80,7 +80,7 @@ public class FeatureActivity extends BaseActivity {
                 .show();
     }
 
-    // 10.1.2 Người quản lý nhấn vào chức năng "Bán chạy" từ danh sách các chức năng
+    // 10.1.3 Người quản lý nhấn vào chức năng "Bán chạy" từ danh sách các chức năng
     public void onClickItemFeature(Feature feature) {
         switch (feature.getId()) {
             case Feature.FEATURE_LIST_MENU:
@@ -141,7 +141,7 @@ public class FeatureActivity extends BaseActivity {
     private void goToListDrinkPopular() {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.KEY_TYPE_STATISTICAL, Constants.TYPE_REVENUE);
-        // 10.1.5.1 Gán biến cờ
+        // Gán biến cờ
         bundle.putBoolean(Constants.KEY_DRINK_POPULAR, true);
         GlobalFuntion.startActivity(this, StatisticalActivity.class, bundle);
     }
