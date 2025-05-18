@@ -24,18 +24,21 @@ public class FeatureActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 10.1.0 Hê thống hiển thị giao diện chức năng chính FeatureActivity
         setContentView(R.layout.activity_feature);
-
+        // 10.1.0.1 Thiết lập danh sách các chức năng
         initUi();
         showAdmobBanner();
     }
 
     private void initUi() {
+        // 10.1.1 Hệ thống tạo danh sách các chức năng RecyclerView
         RecyclerView rcvFeature = findViewById(R.id.rcv_feature);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rcvFeature.setLayoutManager(gridLayoutManager);
-
+        // 10.1.1.1  Hệ thống khởi tạo adapter với danh sách chức năng
         FeatureAdapter featureAdapter = new FeatureAdapter(getListFeatures(), this::onClickItemFeature);
+        // 10.1.1.2 Gán adapter vào RecyclerView
         rcvFeature.setAdapter(featureAdapter);
     }
 
@@ -57,6 +60,7 @@ public class FeatureActivity extends BaseActivity {
         list.add(new Feature(Feature.FEATURE_REVELUE, R.drawable.ic_revenue, getString(R.string.feature_revenue)));
         list.add(new Feature(Feature.FEATURE_COST, R.drawable.ic_cost, getString(R.string.feature_cost)));
         list.add(new Feature(Feature.FEATURE_PROFIT, R.drawable.ic_profit, getString(R.string.feature_profit)));
+        // 10.1.1.3 chức năng "Bán chạy" trong danh sách các chức năng
         list.add(new Feature(Feature.FEATURE_DRINK_POPULAR, R.drawable.ic_drink_popular, getString(R.string.feature_drink_popular)));
 
         return list;
@@ -76,6 +80,7 @@ public class FeatureActivity extends BaseActivity {
                 .show();
     }
 
+    // 10.1.2 Người quản lý nhấn vào chức năng "Bán chạy" từ danh sách các chức năng
     public void onClickItemFeature(Feature feature) {
         switch (feature.getId()) {
             case Feature.FEATURE_LIST_MENU:
@@ -116,6 +121,7 @@ public class FeatureActivity extends BaseActivity {
                 GlobalFuntion.startActivity(this, ProfitActivity.class);
                 break;
 
+            // 10.1.4 Hệ thống nhận dạng đây là chức năng "Bán chạy", và gọi goToListDrinkPopular().
             case Feature.FEATURE_DRINK_POPULAR:
                 goToListDrinkPopular();
                 break;
@@ -131,43 +137,12 @@ public class FeatureActivity extends BaseActivity {
         GlobalFuntion.startActivity(this, StatisticalActivity.class, bundle);
     }
 
+    // 10.1.5 Hệ thống tạo Intent đến StatisticalActivity, gắn thêm cờ KEY_DRINK_POPULAR = true.
     private void goToListDrinkPopular() {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.KEY_TYPE_STATISTICAL, Constants.TYPE_REVENUE);
+        // 10.1.5.1 Gán biến cờ
         bundle.putBoolean(Constants.KEY_DRINK_POPULAR, true);
         GlobalFuntion.startActivity(this, StatisticalActivity.class, bundle);
     }
-
-    // Tách phương thức showAdmobBanner thành hai phương thức
-    private void initializeAdmob() {
-        MobileAds.initialize(this, "ca-app-pub-8577216370890753~4422934437");
-    }
-
-    private void loadAdmobBanner() {
-        AdView adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
-
-    // Tối ưu phương thức createFeature để dễ mở rộng
-    private Feature createFeature(int id, int iconResId, int titleResId) {
-        String title = getString(titleResId);
-        return new Feature(id, iconResId, title);
-    }
-
-    // Bổ sung phương thức loadAdWithCallback cho phép xử lý callback tải xong
-    private void loadAdWithCallback() {
-        AdView adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-
-            }
-
-        });
-    }
-
 }
