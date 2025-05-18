@@ -41,14 +41,17 @@ public class StatisticalActivity extends BaseActivity {
     private boolean isDrinkPopular;
     private List<Statistical> mListStatisticals;
 
+    // 10.1.6 Giao diện StatisticalActivity được khởi tạo và hiển thị danh sách thống kê.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 10.1.6.1 hiển thị giao diện
         setContentView(R.layout.activity_statistical);
-
+        // 10.1.7 Hệ thống đọc Intent và xác nhận đây là thống kê "bán chạy".
         getDataIntent();
         initToolbar();
         initUi();
+        // 10.1.8 Hệ thống truy vấn dữ liệu History từ Firebase.
         getListStatistical();
     }
 
@@ -58,6 +61,7 @@ public class StatisticalActivity extends BaseActivity {
             return;
         }
         mType = bundle.getInt(Constants.KEY_TYPE_STATISTICAL);
+        // 10.1.7.1 Xác nhận đây là thống kê đồ uống bán chạy
         isDrinkPopular = bundle.getBoolean(Constants.KEY_DRINK_POPULAR);
     }
 
@@ -144,6 +148,7 @@ public class StatisticalActivity extends BaseActivity {
         });
     }
 
+    // 10.1.9 Hệ thống lọc các bản ghi phù hợp và nhóm chúng theo từng đồ uống (drinkId).
     private void getListStatistical() {
         MyApplication.get(this).getHistoryDatabaseReference()
                 .addValueEventListener(new ValueEventListener() {
@@ -156,6 +161,7 @@ public class StatisticalActivity extends BaseActivity {
                                 list.add(history);
                             }
                         }
+                        // 10.1.9.1 Xử lý danh sách lấy được
                         handleDataHistories(list);
                     }
 
@@ -197,6 +203,7 @@ public class StatisticalActivity extends BaseActivity {
         return history.getDate() >= longDateFrom && history.getDate() <= longDateTo;
     }
 
+    // 10.1.10 Hệ thống tính tổng doanh thu từng món, và sắp xếp danh sách theo thứ tự giảm dần.
     private void handleDataHistories(List<History> list) {
         if (list == null || list.isEmpty()) {
             return;
@@ -209,6 +216,7 @@ public class StatisticalActivity extends BaseActivity {
         for (History history : list) {
             long drinkId = history.getDrinkId();
             if (checkStatisticalExist(drinkId)) {
+                // 10.1.9.2 Gom nhóm dữ liệu theo drinkId
                 getStatisticalFromDrinkId(drinkId).getHistories().add(history);
             } else {
                 Statistical statistical = new Statistical();
@@ -222,6 +230,7 @@ public class StatisticalActivity extends BaseActivity {
         }
         if (isDrinkPopular) {
             List<Statistical> listPopular = new ArrayList<>(mListStatisticals);
+            // 10.1.10.1 Sắp xếp danh sách đồ uống theo doanh thu giảm dần
             Collections.sort(listPopular, (statistical1, statistical2)
                     -> statistical2.getTotalPrice() - statistical1.getTotalPrice());
             StatisticalAdapter statisticalAdapter = new StatisticalAdapter(listPopular, statistical -> {
@@ -232,14 +241,18 @@ public class StatisticalActivity extends BaseActivity {
             rcvData.setAdapter(statisticalAdapter);
         } else {
             StatisticalAdapter statisticalAdapter = new StatisticalAdapter(mListStatisticals, statistical -> {
+                // 10.1.12 Người quản lý nhấn vào một đồ uống bất kỳ trong danh sách.
                 Drink drink = new Drink(statistical.getDrinkId(), statistical.getDrinkName(),
                         statistical.getDrinkUnitId(), statistical.getDrinkUnitName());
-                GlobalFuntion.goToDrinkDetailActivity(this, drink);
+                // 10.1.12.1 Hệ thống mở chi tiết đồ uống
+                GlobalFuntion.goToDrinkDetailActivity(this, drink); // 10.1.13 Gọi intent mở DrinkDetailActivity
             });
+            // 10.1.11 Danh sách đồ uống bán chạy được hiển thị trên giao diện.
             rcvData.setAdapter(statisticalAdapter);
         }
 
         // Calculate total
+        // 10.1.10.3 Tính tổng doanh thu
         String strTotalValue = getTotalValues() + Constants.CURRENCY;
         tvTotalValue.setText(strTotalValue);
     }

@@ -88,6 +88,7 @@ public class GlobalFuntion {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    // 10.1.13 Hệ thống tạo Intent đến DrinkDetailActivity, truyền thông tin đồ uống.
     public static void goToDrinkDetailActivity(Context context, Drink drink) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constants.KEY_INTENT_DRINK_OBJECT, drink);

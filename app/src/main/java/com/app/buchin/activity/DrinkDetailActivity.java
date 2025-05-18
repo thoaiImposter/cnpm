@@ -16,13 +16,16 @@ public class DrinkDetailActivity extends BaseActivity {
 
     private Drink mDrink;
 
+    // 10.1.14 Giao diện chi tiết đồ uống được hiển thị, kèm thông tin: số lượng bán, tổng tiền, thời gian.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 10.1.14.1 Giao diện chi tiết đồ uống được hiển thị
         setContentView(R.layout.activity_drink_detail);
-
+        // 10.1.14.2 Hệ thống lấy dữ liệu đồ uống từ intent
         getDataIntent();
         initToolbar();
+        // 10.1.14.3 Hiển thị kèm thông tin
         initView();
     }
 
@@ -31,6 +34,7 @@ public class DrinkDetailActivity extends BaseActivity {
         if (bundle == null) {
             return;
         }
+        // 10.1.14.2.1 Nhận đối tượng đồ uống (Drink) truyền vào
         mDrink = (Drink) bundle.get(Constants.KEY_INTENT_DRINK_OBJECT);
     }
 
@@ -41,27 +45,31 @@ public class DrinkDetailActivity extends BaseActivity {
         }
     }
 
+    // 10.1.16 Người quản lý quay lại màn hình thống kê bằng nút back.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
+            // Người quản lý nhấn nút quay lại
             onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // 10.1.15 Người quản lý có thể chuyển tab giữa “Đã nhập” và “Đã tiêu thụ” để xem thêm thông tin.
     private void initView() {
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         ViewPager2 viewPager2 = findViewById(R.id.view_pager_2);
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(this, mDrink);
         viewPager2.setAdapter(myPagerAdapter);
+        // 10.1.15.1 Thiết lập hai tab: “Đã nhập” và “Tiêu thụ”
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             if (position == 0) {
-                tab.setText(getString(R.string.label_added));
+                tab.setText(getString(R.string.label_added)); // Tab hiển thị lịch sử nhập
             } else {
-                tab.setText(getString(R.string.label_used));
+                tab.setText(getString(R.string.label_used));  // Tab hiển thị lịch sử tiêu thụ
             }
         }).attach();
     }
