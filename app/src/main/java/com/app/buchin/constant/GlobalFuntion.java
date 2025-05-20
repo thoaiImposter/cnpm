@@ -95,4 +95,29 @@ public class GlobalFuntion {
         bundle.putSerializable(Constants.KEY_INTENT_DRINK_OBJECT, drink);
         startActivity(context, DrinkDetailActivity.class, bundle);
     }
+
+    // Hàm format số tiền hiển thị
+    public static String formatCurrency(double amount) {
+        return String.format("%,.0f VND", amount);
+    }
+
+    // Hàm chuyển tên có dấu
+    public static String normalizeVietnamese(String input) {
+        if (input == null) return "";
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+
+    // Hàm chuyển số chuỗi thành đơn vị
+    public static String formatQuantityUnit(int quantity, String unit) {
+        if (quantity <= 0 || unit == null) return "0";
+        return quantity + " " + unit.toLowerCase();
+    }
+
+    // Hàm kiểm tra intent có chứa dữ liệu đồ uống không
+    public static boolean hasDrinkData(Intent intent) {
+        return intent != null && intent.hasExtra(Constants.KEY_INTENT_DRINK_OBJECT);
+    }
+
+
 }
