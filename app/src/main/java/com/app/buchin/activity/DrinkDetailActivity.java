@@ -74,30 +74,4 @@ public class DrinkDetailActivity extends BaseActivity {
         }).attach();
     }
 
-    // kiểm tra dữ liệu truyền vào từ intent
-    private void logDrinkDataIfDebug() {
-        if (mDrink != null) {
-            System.out.println("Drink detail - ID: " + mDrink.getId()
-                    + ", Name: " + mDrink.getName());
-        }
-    }
-
-    // Tách setupTabLabels() riêng cho TabLayoutMediator
-    private void setupTabLabels(TabLayout tabLayout, ViewPager2 viewPager2) {
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            if (position == 0) {
-                tab.setText(getString(R.string.label_added));
-            } else {
-                tab.setText(getString(R.string.label_used));
-            }
-        }).attach();
-    }
-
-    private void refreshDetailData() {
-        // Dự phòng: tải lại dữ liệu từ Firebase nếu cần
-        getDataIntent();
-        initToolbar();
-        initView();
-    }
-
 }
