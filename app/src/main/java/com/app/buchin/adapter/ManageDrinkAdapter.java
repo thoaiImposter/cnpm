@@ -15,10 +15,26 @@ import com.app.buchin.model.Drink;
 
 import java.util.List;
 
-public class ManageDrinkAdapter  {
+public class ManageDrinkAdapter extends RecyclerView.Adapter {
 
     private final List<Drink> mListDrink;
     private final IManagerDrinkListener iManagerDrinkListener;
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
 
     public interface IManagerDrinkListener {
         void clickItem(Drink drink);
