@@ -51,6 +51,8 @@ public class UnitActivity extends BaseActivity {
     private final ChildEventListener mChildEventListener = new ChildEventListener() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
+        // 1.1.1 UnitActivity gửi yêu cầu đọc dữ liệu từ Firebase Realtime Database.
+        // 1.1.2 Firebase phản hồi với danh sách các đơn vị đo lường.
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
             UnitObject unitObject = dataSnapshot.getValue(UnitObject.class);
             if (unitObject == null || mListUnit == null || mUnitAdapter == null) {
@@ -59,11 +61,13 @@ public class UnitActivity extends BaseActivity {
             if (StringUtil.isEmpty(mKeySeach)) {
                 mListUnit.add(0, unitObject);
             } else {
+                // 1.5.2 UnitActivity lọc danh sách đơn vị theo tên khớp từ khóa.
                 if (GlobalFuntion.getTextSearch(unitObject.getName().toLowerCase())
                         .contains(GlobalFuntion.getTextSearch(mKeySeach).toLowerCase())) {
                     mListUnit.add(0, unitObject);
                 }
             }
+            // 1.1.3 UnitActivity hiển thị danh sách này cho Bar Manager.
             mUnitAdapter.notifyDataSetChanged();
         }
 
@@ -80,6 +84,7 @@ public class UnitActivity extends BaseActivity {
                     break;
                 }
             }
+            // 1.3.7 UnitActivity hiển thị thông báo thành công (implicitly via UI update after edit).
             mUnitAdapter.notifyDataSetChanged();
         }
 
@@ -96,6 +101,7 @@ public class UnitActivity extends BaseActivity {
                     break;
                 }
             }
+            // 1.4.6 UnitActivity hiển thị thông báo thành công (implicitly via UI update after delete).
             mUnitAdapter.notifyDataSetChanged();
         }
 
@@ -116,6 +122,7 @@ public class UnitActivity extends BaseActivity {
 
         initToolbar();
         initUi();
+        // 1.1 Hệ thống mở UnitActivity và tự động tải danh sách các đơn vị đo lường từ Firebase Realtime Database.
         getListUnit();
     }
 
@@ -138,17 +145,20 @@ public class UnitActivity extends BaseActivity {
     }
 
     private void initUi() {
+        // 1.5.1 Bar Manager nhập từ khóa vào thanh tìm kiếm trong UnitActivity.
         edtSearchName = findViewById(R.id.edt_search_name);
         ImageView imgSearch = findViewById(R.id.img_search);
         imgSearch.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                // 1.5.3 Kết quả tìm kiếm được hiển thị cho Bar Manager.
                 searchUnit();
             }
         });
 
         edtSearchName.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // 1.5.3 Kết quả tìm kiếm được hiển thị cho Bar Manager.
                 searchUnit();
                 return true;
             }
@@ -171,16 +181,19 @@ public class UnitActivity extends BaseActivity {
                 String strKey = s.toString().trim();
                 if (strKey.equals("") || strKey.length() == 0) {
                     mKeySeach = "";
+                    // 1.5.2 UnitActivity lọc danh sách đơn vị theo tên khớp từ khóa (reset when search is cleared).
                     getListUnit();
                     GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
                 }
             }
         });
 
+        // 1.2.1 Bar Manager nhấn nút "Thêm" trong UnitActivity.
         FloatingActionButton fabAdd = findViewById(R.id.fab_add_data);
         fabAdd.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                // 1.2.2 Ứng dụng mở Dialog cho phép nhập tên và mô tả đơn vị mới.
                 onClickAddOrEditUnit(null);
             }
         });
@@ -192,6 +205,7 @@ public class UnitActivity extends BaseActivity {
                 if (mListUnit == null || mListUnit.isEmpty()) {
                     return;
                 }
+                // 1.4.4 UnitActivity gửi yêu cầu xóa đơn vị (all units in this case).
                 onClickDeleteAllUnit();
             }
         });
@@ -204,11 +218,13 @@ public class UnitActivity extends BaseActivity {
         mUnitAdapter = new UnitAdapter(mListUnit, new UnitAdapter.IManagerUnitListener() {
             @Override
             public void editUnit(UnitObject unitObject) {
+                // 1.3.2 Ứng dụng mở Dialog để chỉnh sửa thông tin.
                 onClickAddOrEditUnit(unitObject);
             }
 
             @Override
             public void deleteUnit(UnitObject unitObject) {
+                // 1.4.1 Bar Manager nhấn nút "Xoá" trên đơn vị cần xóa.
                 onClickDeleteUnit(unitObject);
             }
         });
@@ -226,6 +242,7 @@ public class UnitActivity extends BaseActivity {
         });
     }
 
+    // 1.1.1 UnitActivity gửi yêu cầu đọc dữ liệu từ Firebase Realtime Database.
     public void getListUnit() {
         if (mListUnit != null) {
             mListUnit.clear();
@@ -234,16 +251,20 @@ public class UnitActivity extends BaseActivity {
         MyApplication.get(this).getUnitDatabaseReference().addChildEventListener(mChildEventListener);
     }
 
+    // 1.5.2 UnitActivity lọc danh sách đơn vị theo tên khớp từ khóa.
     private void searchUnit() {
         if (mListUnit == null || mListUnit.isEmpty()) {
             GlobalFuntion.hideSoftKeyboard(this);
             return;
         }
         mKeySeach = edtSearchName.getText().toString().trim();
+        // 1.5.3 Kết quả tìm kiếm được hiển thị cho Bar Manager.
         getListUnit();
         GlobalFuntion.hideSoftKeyboard(this);
     }
 
+    // 1.2.2 Ứng dụng mở Dialog cho phép nhập tên và mô tả đơn vị mới.
+    // 1.3.2 Ứng dụng mở Dialog để chỉnh sửa thông tin.
     private void onClickAddOrEditUnit(UnitObject unitObject) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -280,6 +301,8 @@ public class UnitActivity extends BaseActivity {
         tvDialogAction.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                // 1.2.3 Bar Manager nhập thông tin và xác nhận trong Dialog.
+                // 1.3.3 Bar Manager sửa tên hoặc mô tả và xác nhận.
                 String strUnitName = edtUnitName.getText().toString().trim();
                 if (StringUtil.isEmpty(strUnitName)) {
                     showToast(getString(R.string.msg_unit_name_require));
@@ -292,6 +315,8 @@ public class UnitActivity extends BaseActivity {
                 }
 
                 if (unitObject == null) {
+                    // 1.2.4 Dialog gửi dữ liệu về lại UnitActivity.
+                    // 1.2.5 UnitActivity gửi dữ liệu lên Firebase để tạo đơn vị mới.
                     long id = System.currentTimeMillis();
                     UnitObject unit = new UnitObject();
                     unit.setId(id);
@@ -299,24 +324,30 @@ public class UnitActivity extends BaseActivity {
 
                     MyApplication.get(UnitActivity.this).getUnitDatabaseReference()
                             .child(String.valueOf(id)).setValue(unit, (error, ref) -> {
-                        GlobalFuntion.hideSoftKeyboard(UnitActivity.this, edtUnitName);
-                        showToast(getString(R.string.msg_add_unit_success));
-                        dialog.dismiss();
-                        GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
-                    });
+                                // 1.2.6 Firebase xác nhận đã thêm thành công.
+                                // 1.2.7 UnitActivity hiển thị thông báo thành công.
+                                GlobalFuntion.hideSoftKeyboard(UnitActivity.this, edtUnitName);
+                                showToast(getString(R.string.msg_add_unit_success));
+                                dialog.dismiss();
+                                GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
+                            });
                 } else {
+                    // 1.3.4 Dialog gửi thông tin đã chỉnh sửa về UnitActivity.
+                    // 1.3.5 UnitActivity cập nhật thông tin đơn vị lên Firebase.
                     Map<String, Object> map = new HashMap<>();
                     map.put("name", strUnitName);
 
                     MyApplication.get(UnitActivity.this).getUnitDatabaseReference()
                             .child(String.valueOf(unitObject.getId())).updateChildren(map, (error, ref) -> {
-                        GlobalFuntion.hideSoftKeyboard(UnitActivity.this, edtUnitName);
-                        showToast(getString(R.string.msg_edit_unit_success));
-                        dialog.dismiss();
-                        GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
-                        updateUnitInDrink(new UnitObject(unitObject.getId(), strUnitName));
-                        updateUnitInHistory(new UnitObject(unitObject.getId(), strUnitName));
-                    });
+                                // 1.3.6 Firebase xác nhận đã cập nhật thành công.
+                                // 1.3.7 UnitActivity hiển thị thông báo thành công.
+                                GlobalFuntion.hideSoftKeyboard(UnitActivity.this, edtUnitName);
+                                showToast(getString(R.string.msg_edit_unit_success));
+                                dialog.dismiss();
+                                GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
+                                updateUnitInDrink(new UnitObject(unitObject.getId(), strUnitName));
+                                updateUnitInHistory(new UnitObject(unitObject.getId(), strUnitName));
+                            });
                 }
             }
         });
@@ -338,20 +369,27 @@ public class UnitActivity extends BaseActivity {
         return false;
     }
 
+    // 1.4.1 Bar Manager nhấn nút "Xoá" trên đơn vị cần xóa.
     private void onClickDeleteUnit(UnitObject unitObject) {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_delete))
                 .setMessage(getString(R.string.msg_confirm_delete))
                 .setPositiveButton(getString(R.string.action_delete), (dialogInterface, i)
-                        -> MyApplication.get(UnitActivity.this).getUnitDatabaseReference()
-                        .child(String.valueOf(unitObject.getId())).removeValue((error, ref) -> {
-                            showToast(getString(R.string.msg_delete_unit_success));
-                            GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
-                        }))
+                        -> {
+                    // 1.4.4 UnitActivity gửi yêu cầu xóa đơn vị.
+                    MyApplication.get(UnitActivity.this).getUnitDatabaseReference()
+                            .child(String.valueOf(unitObject.getId())).removeValue((error, ref) -> {
+                                // 1.4.5 Firebase xác nhận đã xoá thành công.
+                                // 1.4.6 UnitActivity hiển thị thông báo thành công.
+                                showToast(getString(R.string.msg_delete_unit_success));
+                                GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
+                            });
+                })
                 .setNegativeButton(getString(R.string.action_cancel), null)
                 .show();
     }
 
+    // 1.4.4 UnitActivity gửi yêu cầu xóa đơn vị (all units).
     private void onClickDeleteAllUnit() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_delete))
@@ -359,6 +397,8 @@ public class UnitActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.delete_all), (dialogInterface, i)
                         -> MyApplication.get(UnitActivity.this).getUnitDatabaseReference()
                         .removeValue((error, ref) -> {
+                            // 1.4.5 Firebase xác nhận đã xoá thành công.
+                            // 1.4.6 UnitActivity hiển thị thông báo thành công.
                             showToast(getString(R.string.msg_delete_all_unit_success));
                             GlobalFuntion.hideSoftKeyboard(UnitActivity.this);
                         }))
@@ -366,43 +406,48 @@ public class UnitActivity extends BaseActivity {
                 .show();
     }
 
+    // Update related data when unit is edited
     private void updateUnitInDrink(UnitObject unitObject) {
+        // 1.4.2 UnitActivity gửi yêu cầu kiểm tra với Firebase xem đơn vị này có đang được sử dụng không.
         MyApplication.get(this).getDrinkDatabaseReference()
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Drink> list = new ArrayList<>();
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<Drink> list = new ArrayList<>();
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Drink drink = dataSnapshot.getValue(Drink.class);
-                    if (drink != null && drink.getUnitId() == unitObject.getId()) {
-                        list.add(drink);
+                        // 1.4.3 Firebase phản hồi đơn vị chưa được sử dụng (implicitly handled by updating if used).
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Drink drink = dataSnapshot.getValue(Drink.class);
+                            if (drink != null && drink.getUnitId() == unitObject.getId()) {
+                                list.add(drink);
+                            }
+                        }
+                        MyApplication.get(UnitActivity.this).getDrinkDatabaseReference()
+                                .removeEventListener(this);
+                        if (list.isEmpty()) {
+                            return;
+                        }
+                        for (Drink drink : list) {
+                            MyApplication.get(UnitActivity.this).getDrinkDatabaseReference()
+                                    .child(String.valueOf(drink.getId()))
+                                    .child("unitName").setValue(unitObject.getName());
+                        }
                     }
-                }
-                MyApplication.get(UnitActivity.this).getDrinkDatabaseReference()
-                        .removeEventListener(this);
-                if (list.isEmpty()) {
-                    return;
-                }
-                for (Drink drink : list) {
-                    MyApplication.get(UnitActivity.this).getDrinkDatabaseReference()
-                            .child(String.valueOf(drink.getId()))
-                            .child("unitName").setValue(unitObject.getName());
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
     }
 
     private void updateUnitInHistory(UnitObject unitObject) {
+        // 1.4.2 UnitActivity gửi yêu cầu kiểm tra với Firebase xem đơn vị này có đang được sử dụng không.
         MyApplication.get(this).getHistoryDatabaseReference()
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         List<History> list = new ArrayList<>();
 
+                        // 1.4.3 Firebase phản hồi đơn vị chưa được sử dụng (implicitly handled by updating if used).
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             History history = dataSnapshot.getValue(History.class);
                             if (history != null && history.getUnitId() == unitObject.getId()) {

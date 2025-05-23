@@ -10,6 +10,8 @@ public class UnitObject implements Serializable {
     public UnitObject() {
     }
 
+    // 1.2.4 Dialog gửi dữ liệu về lại UnitActivity (used when creating new unit).
+    // 1.3.4 Dialog gửi thông tin đã chỉnh sửa về UnitActivity (used when editing unit).
     public UnitObject(long id, String name) {
         this.id = id;
         this.name = name;
