@@ -31,6 +31,7 @@ public class SelectUnitAdapter extends ArrayAdapter<UnitObject> {
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_choose_option, null);
             TextView tvSelected = convertView.findViewById(R.id.tv_selected);
+            // 1.1.1 UnitActivity hiển thị danh sách này cho Bar Manager (in dropdown for unit selection).
             tvSelected.setText(this.getItem(position).getName());
         }
         return convertView;
@@ -40,6 +41,7 @@ public class SelectUnitAdapter extends ArrayAdapter<UnitObject> {
     public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = View.inflate(context, R.layout.item_drop_down_option, null);
         TextView tvName = view.findViewById(R.id.textview_name);
+        // 1.1.1 UnitActivity hiển thị danh sách này cho Bar Manager (in dropdown for unit selection).
         tvName.setText(this.getItem(position).getName());
         return view;
     }
