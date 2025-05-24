@@ -20,13 +20,16 @@ public class UnitAdapter extends RecyclerView.Adapter<UnitAdapter.UnitViewHolder
     private final List<UnitObject> mListUnit;
     private final IManagerUnitListener iManagerUnitListener;
 
-    public interface IManagerUnitListener {// 4. Bar Manager thao tác với đơn vị đo lường:
-        void editUnit(UnitObject unitObject);// 4.2 Sửa thông tin đơn vị:
+    public interface IManagerUnitListener {
+        // 1.3.1 Bar Manager chọn đơn vị cần chỉnh sửa trong danh sách.
+        void editUnit(UnitObject unitObject);
 
-        void deleteUnit(UnitObject unitObject);// 4.3 Xóa đơn vị:
+        // 1.4.1 Bar Manager nhấn nút "Xoá" trên đơn vị cần xóa.
+        void deleteUnit(UnitObject unitObject);
     }
 
-    public UnitAdapter(List<UnitObject> list, IManagerUnitListener listener) {// 3.3 UnitActivity hiển thị danh sách đơn vị đo lường (dữ liệu truyền vào adapter)
+    // 1.1.1 UnitActivity hiển thị danh sách này cho Bar Manager (via adapter initialization).
+    public UnitAdapter(List<UnitObject> list, IManagerUnitListener listener) {
         this.mListUnit = list;
         this.iManagerUnitListener = listener;
     }
@@ -34,7 +37,7 @@ public class UnitAdapter extends RecyclerView.Adapter<UnitAdapter.UnitViewHolder
     @NonNull
     @Override
     public UnitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // 3.3. UnitActivity khởi tạo view item cho danh sách đơn vị
+        // 1.1.1 UnitActivity hiển thị danh sách này cho Bar Manager (create view for each unit item).
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_unit, parent, false);
         return new UnitViewHolder(view);
     }
@@ -45,25 +48,22 @@ public class UnitAdapter extends RecyclerView.Adapter<UnitAdapter.UnitViewHolder
         if (unitObject == null) {
             return;
         }
-        // 3.3 Hiển thị tên đơn vị lên giao diện item
+        // 1.1.1 UnitActivity hiển thị danh sách này cho Bar Manager (bind unit name to UI).
         holder.tvName.setText(unitObject.getName());
 
         // Listener
-        // 4.2.1 - 4.2.7 Sửa thông tin đơn vị:
+        // 1.3.1 Bar Manager chọn đơn vị cần chỉnh sửa trong danh sách.
         holder.imgEdit.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                // 4.2.1 Bar Manager chọn đơn vị cần chỉnh sửa
-                // 4.2.2 Ứng dụng mở Dialog chỉnh sửa (xử lý bên Activity)
                 iManagerUnitListener.editUnit(unitObject);
             }
         });
-        // 4.3.1 - 4.3.6 Xóa đơn vị:
+
+        // 1.4.1 Bar Manager nhấn nút "Xoá" trên đơn vị cần xóa.
         holder.imgDelete.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                // 4.3.1 Bar Manager nhấn nút "Xoá"
-                // 4.3.2 Kiểm tra đơn vị có đang được dùng (xử lý bên Activity)
                 iManagerUnitListener.deleteUnit(unitObject);
             }
         });
