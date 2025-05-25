@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ManageDrinkAdapter extends RecyclerView.Adapter<ManageDrinkAdapter.ManageDrinkViewHolder> {
 
-    private final List<Drink> mListDrink;
-    private final IManagerDrinkListener iManagerDrinkListener;
+    private final List<Drink> mListDrink;   //Danh sách đối tuợng đồ uống
+    private final IManagerDrinkListener iManagerDrinkListener;  //Inteface xử lí kh ng dùng click vào item
 
     public interface IManagerDrinkListener {
         void clickItem(Drink drink);
@@ -54,7 +54,7 @@ public class ManageDrinkAdapter extends RecyclerView.Adapter<ManageDrinkAdapter.
             }
         });
     }
-
+    //Trả về s loại đồ uống
     @Override
     public int getItemCount() {
         if (mListDrink != null) {

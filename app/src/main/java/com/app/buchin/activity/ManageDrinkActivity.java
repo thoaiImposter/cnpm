@@ -30,13 +30,16 @@ import java.util.List;
 
 public class ManageDrinkActivity extends BaseActivity {
 
-    private List<Drink> mListDrink;
-    private ManageDrinkAdapter mManageDrinkAdapter;
+    private List<Drink> mListDrink; //Danh sách đồ uống được hiển thị
+    private ManageDrinkAdapter mManageDrinkAdapter; //Adapter hiển thị danh sách đồ uống
 
-    private EditText edtSearchName;
-    private String mKeySeach;
+    private EditText edtSearchName; //EditText để nhập từ khóa tìm kiếm
+    private String mKeySeach;   //Từ khóa tìm kiếm
+    //Theo dõi sự thay đổi dữ liệu từ Firebase
     private final ChildEventListener mChildEventListener = new ChildEventListener() {
         @SuppressLint("NotifyDataSetChanged")
+        //Them đồ uống mới nếu phù hơp từ khóa, cập nhật thông tin nếu đồ uống bị chỉnh sửa
+        //Xóa khỏi ds nếu đồ uống bị xóa trên firebase, báo  lỗi nếu truy cập thất bại
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
             Drink drink = dataSnapshot.getValue(Drink.class);
@@ -96,6 +99,7 @@ public class ManageDrinkActivity extends BaseActivity {
         }
     };
 
+    //Khởi tạo giao diện: tạo thanh tiêu đề, gán UI và adapter, getListDrink() để lấy dữ liệu từ firebase
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,13 +110,14 @@ public class ManageDrinkActivity extends BaseActivity {
         getListDrink();
     }
 
+    //Thiết lập thanh tiêu đề, bật nút quay lại
     private void initToolbar() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.feature_manage_drink));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
+    // Xử lí khi ấn nút qay lai -> gọi onBackPressed()
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -168,11 +173,13 @@ public class ManageDrinkActivity extends BaseActivity {
         rcvDrink.setLayoutManager(linearLayoutManager);
 
         mListDrink = new ArrayList<>();
+        //5.3 Khi người dùng click vào đồ uống, chuyển đến màn hình khác để xem chi tiết
         mManageDrinkAdapter = new ManageDrinkAdapter(mListDrink, drink
                 -> GlobalFuntion.goToDrinkDetailActivity(this, drink));
         rcvDrink.setAdapter(mManageDrinkAdapter);
     }
-
+    //5.1
+    //Lấy danh sách đồ uống từ firebase
     public void getListDrink() {
         if (mListDrink != null) {
             mListDrink.clear();
@@ -180,7 +187,7 @@ public class ManageDrinkActivity extends BaseActivity {
         }
         MyApplication.get(this).getDrinkDatabaseReference().addChildEventListener(mChildEventListener);
     }
-
+    //5.2 Tìm kiếm dựa theo biến mKeySearch
     private void searchDrink() {
         if (mListDrink == null || mListDrink.isEmpty()) {
             GlobalFuntion.hideSoftKeyboard(this);

@@ -54,7 +54,7 @@ public class HistoryDrinkActivity extends BaseActivity {
     private HistoryAdapter mHistoryAdapter;
 
     private Drink mDrinkSelected;
-    private boolean isDrinkUsed;
+    private boolean isDrinkUsed; //Biến phân biệt nhập hay xuất - false là nhập true là xuất
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,7 +367,7 @@ public class HistoryDrinkActivity extends BaseActivity {
 
         dialog.show();
     }
-
+    //5.6 Sửa số lượng nhâp/ xuất, chỉ sửa đc số lượng th
     private void changeQuantity(long drinkId, int quantity, boolean isAdd) {
         MyApplication.get(HistoryDrinkActivity.this).getQuantityDatabaseReference(drinkId)
                 .addValueEventListener(new ValueEventListener() {

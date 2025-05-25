@@ -91,7 +91,7 @@ public class History {
     public boolean isAdd() {
         return add;
     }
-
+    //5.4 5.5 thêm lịch sử nhập hoặc xuất hàngs
     public void setAdd(boolean add) {
         this.add = add;
     }
