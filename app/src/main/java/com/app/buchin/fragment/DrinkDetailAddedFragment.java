@@ -90,7 +90,7 @@ public class DrinkDetailAddedFragment extends Fragment {
             public void onClickItemHistory(History history) {}
         });
         rcvHistory.setAdapter(mHistoryAdapter);
-
+        // Nút thêm mới lịch sử
         FloatingActionButton fabAddData = mView.findViewById(R.id.fab_add_data);
         fabAddData.setOnClickListener(new IOnSingleClickListener() {
             @Override
@@ -133,7 +133,7 @@ public class DrinkDetailAddedFragment extends Fragment {
                     }
                 });
     }
-
+    // Hiển thị tổng số lượng và giá trị ở dưới màn hình
     private void displayLayoutBottomInfor() {
         // Calculator quantity
         String strTotalQuantity = getTotalQuantity() + " " + mDrink.getUnitName();
@@ -166,7 +166,8 @@ public class DrinkDetailAddedFragment extends Fragment {
         }
         return totalPrice;
     }
-
+    // 5.4.1
+    // Mở dialog để thêm mới hoặc sửa lịch sử
     private void onClickAddOrEditHistory(History history) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -266,7 +267,7 @@ public class DrinkDetailAddedFragment extends Fragment {
 
         dialog.show();
     }
-
+    // Cập nhật số lượng tồn kho
     private void changeQuantity(long drinkId, int quantity, boolean isAdd) {
         if (getActivity() == null) {
             return;
@@ -295,7 +296,7 @@ public class DrinkDetailAddedFragment extends Fragment {
                     }
                 });
     }
-
+    // 5.4.3 Xóa lịch sử
     private void onClickDeleteHistory(History history) {
         if (getActivity() == null) {
             return;

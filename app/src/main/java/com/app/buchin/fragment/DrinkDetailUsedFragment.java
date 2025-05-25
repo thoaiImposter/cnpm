@@ -167,7 +167,7 @@ public class DrinkDetailUsedFragment extends Fragment {
         }
         return totalPrice;
     }
-
+    //5.4.1 Thêm lịch sử. mở dialog
     private void onClickAddOrEditHistory(@Nullable History history) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -267,7 +267,7 @@ public class DrinkDetailUsedFragment extends Fragment {
 
         dialog.show();
     }
-
+    //5.4.5 Thay đổi số lượng, tính lại số lượng và thu nhập
     private void changeQuantity(long drinkId, int quantity, boolean isAdd) {
         if (getActivity() == null) {
             return;
@@ -296,7 +296,7 @@ public class DrinkDetailUsedFragment extends Fragment {
                     }
                 });
     }
-
+    //5.43.3
     private void onClickDeleteHistory(History history) {
         if (getActivity() == null) {
             return;

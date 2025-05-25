@@ -28,27 +28,34 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class ManageDrinkActivity - Màn hình quản lý đồ uống
+ * Thực hiện các chức năng theo usecase:
+ * 5.1 - Hiển thị danh sách đồ uống
+ * 5.2 - Tìm kiếm đồ uống
+ * 5.3 - Chuyển đến chi tiết khi chọn 1 đồ uống
+ */
 public class ManageDrinkActivity extends BaseActivity {
 
-    private List<Drink> mListDrink; //Danh sách đồ uống được hiển thị
-    private ManageDrinkAdapter mManageDrinkAdapter; //Adapter hiển thị danh sách đồ uống
+    private List<Drink> mListDrink; // Danh sách đồ uống được hiển thị
+    private ManageDrinkAdapter mManageDrinkAdapter; // Adapter hiển thị danh sách đồ uống
+    private EditText edtSearchName; // Ô tìm kiếm
+    private String mKeySeach;   // Từ khóa tìm kiếm
 
-    private EditText edtSearchName; //EditText để nhập từ khóa tìm kiếm
-    private String mKeySeach;   //Từ khóa tìm kiếm
-    //Theo dõi sự thay đổi dữ liệu từ Firebase
+    /**
+     * (5.1.3, 5.2.2) Theo dõi dữ liệu thay đổi từ Firebase: thêm, cập nhật, xóa
+     */
     private final ChildEventListener mChildEventListener = new ChildEventListener() {
         @SuppressLint("NotifyDataSetChanged")
-        //Them đồ uống mới nếu phù hơp từ khóa, cập nhật thông tin nếu đồ uống bị chỉnh sửa
-        //Xóa khỏi ds nếu đồ uống bị xóa trên firebase, báo  lỗi nếu truy cập thất bại
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
             Drink drink = dataSnapshot.getValue(Drink.class);
-            if (drink == null || mListDrink == null || mManageDrinkAdapter == null) {
-                return;
-            }
+            if (drink == null || mListDrink == null || mManageDrinkAdapter == null) return;
+
             if (StringUtil.isEmpty(mKeySeach)) {
-                mListDrink.add(0, drink);
+                mListDrink.add(0, drink); // (5.1.3) thêm nếu không có tìm kiếm
             } else {
+                // (5.2.2) thêm nếu tên đồ uống khớp từ khóa tìm kiếm
                 if (GlobalFuntion.getTextSearch(drink.getName().toLowerCase())
                         .contains(GlobalFuntion.getTextSearch(mKeySeach).toLowerCase())) {
                     mListDrink.add(0, drink);
@@ -61,9 +68,9 @@ public class ManageDrinkActivity extends BaseActivity {
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
             Drink drink = dataSnapshot.getValue(Drink.class);
-            if (drink == null || mListDrink == null || mListDrink.isEmpty() || mManageDrinkAdapter == null) {
-                return;
-            }
+            if (drink == null || mListDrink == null || mListDrink.isEmpty() || mManageDrinkAdapter == null) return;
+
+            // Cập nhật lại item khi có thay đổi trên Firebase
             for (int i = 0; i < mListDrink.size(); i++) {
                 if (drink.getId() == mListDrink.get(i).getId()) {
                     mListDrink.set(i, drink);
@@ -77,9 +84,9 @@ public class ManageDrinkActivity extends BaseActivity {
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
             Drink drink = dataSnapshot.getValue(Drink.class);
-            if (drink == null || mListDrink == null || mListDrink.isEmpty() || mManageDrinkAdapter == null) {
-                return;
-            }
+            if (drink == null || mListDrink == null || mListDrink.isEmpty() || mManageDrinkAdapter == null) return;
+
+            // Xóa khỏi danh sách nếu bị xóa khỏi Firebase
             for (Drink drinkObject : mListDrink) {
                 if (drink.getId() == drinkObject.getId()) {
                     mListDrink.remove(drinkObject);
@@ -99,7 +106,7 @@ public class ManageDrinkActivity extends BaseActivity {
         }
     };
 
-    //Khởi tạo giao diện: tạo thanh tiêu đề, gán UI và adapter, getListDrink() để lấy dữ liệu từ firebase
+    // (5.1) onCreate - Khởi tạo giao diện quản lý đồ uống
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,17 +114,18 @@ public class ManageDrinkActivity extends BaseActivity {
 
         initToolbar();
         initUi();
-        getListDrink();
+        getListDrink(); // (5.1.2) Gửi yêu cầu lấy danh sách đồ uống
     }
 
-    //Thiết lập thanh tiêu đề, bật nút quay lại
+    // (5.1) Tạo toolbar tiêu đề
     private void initToolbar() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.feature_manage_drink));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-    // Xử lí khi ấn nút qay lai -> gọi onBackPressed()
+
+    // Bắt sự kiện nút quay lại
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -129,57 +137,59 @@ public class ManageDrinkActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * (5.2) Thiết lập UI, tìm kiếm, và adapter danh sách
+     */
     private void initUi() {
         edtSearchName = findViewById(R.id.edt_search_name);
         ImageView imgSearch = findViewById(R.id.img_search);
+
+        // (5.2) Ấn nút tìm kiếm
         imgSearch.setOnClickListener(new IOnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                searchDrink();
+                searchDrink(); // (5.2.1)
             }
         });
 
+        // (5.2) Tìm kiếm bằng bàn phím
         edtSearchName.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchDrink();
+                searchDrink(); // (5.2.1)
                 return true;
             }
             return false;
         });
 
+        // (5.2) Nếu người dùng xóa tìm kiếm thì hiển thị toàn bộ danh sách
         edtSearchName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Do nothing
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Do nothing
-            }
-
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 String strKey = s.toString().trim();
                 if (strKey.equals("") || strKey.length() == 0) {
                     mKeySeach = "";
-                    getListDrink();
+                    getListDrink(); // (5.2.1)
                     GlobalFuntion.hideSoftKeyboard(ManageDrinkActivity.this);
                 }
             }
         });
+
         RecyclerView rcvDrink = findViewById(R.id.rcv_data);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rcvDrink.setLayoutManager(linearLayoutManager);
+        rcvDrink.setLayoutManager(new LinearLayoutManager(this));
 
         mListDrink = new ArrayList<>();
-        //5.3 Khi người dùng click vào đồ uống, chuyển đến màn hình khác để xem chi tiết
+
+        // (5.3) Khi người dùng chọn đồ uống -> mở chi tiết
         mManageDrinkAdapter = new ManageDrinkAdapter(mListDrink, drink
-                -> GlobalFuntion.goToDrinkDetailActivity(this, drink));
+                -> GlobalFuntion.goToDrinkDetailActivity(this, drink)); // (5.3.1)
         rcvDrink.setAdapter(mManageDrinkAdapter);
     }
-    //5.1
-    //Lấy danh sách đồ uống từ firebase
+
+    /**
+     * (5.1.2, 5.2.1) Lấy danh sách đồ uống từ Firebase
+     */
     public void getListDrink() {
         if (mListDrink != null) {
             mListDrink.clear();
@@ -187,14 +197,17 @@ public class ManageDrinkActivity extends BaseActivity {
         }
         MyApplication.get(this).getDrinkDatabaseReference().addChildEventListener(mChildEventListener);
     }
-    //5.2 Tìm kiếm dựa theo biến mKeySearch
+
+    /**
+     * (5.2.1) Tìm kiếm đồ uống theo tên
+     */
     private void searchDrink() {
         if (mListDrink == null || mListDrink.isEmpty()) {
             GlobalFuntion.hideSoftKeyboard(this);
             return;
         }
-        mKeySeach = edtSearchName.getText().toString().trim();
-        getListDrink();
+        mKeySeach = edtSearchName.getText().toString().trim(); // Gán từ khóa
+        getListDrink(); // Gọi lại getListDrink() để lọc theo từ khóa
         GlobalFuntion.hideSoftKeyboard(this);
     }
 }
